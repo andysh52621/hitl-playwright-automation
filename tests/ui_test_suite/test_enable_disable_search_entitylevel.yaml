@@ -1,0 +1,26 @@
+# test case and ado meta-data
+description: Verify task search enable/disable behavior based on Task Search toggle at Entity level
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1057423
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Task Search Toggle at Entity Level
+  title: Enable/Disable task search functionality from Entity Info
+  description: >
+    This test verifies that enabling or disabling the "Task Search" toggle on the Entity Info page
+    appropriately shows or hides the filter icon on the task grid page, and ensures that search behavior
+    works only when the toggle is active.
+  severity: critical
+  owner: deepali.shah
+  tags:
+    - smoke
+    - regression
+

@@ -1,0 +1,23 @@
+#test case and ado meta-data
+description: Create product task for product entity using endpoint task-create
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1035158
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Create HITL task via end-point
+  title: Create product payload for product domain and entity
+  description: Call end point to create product task
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - smoke
+    - regression
+    - api

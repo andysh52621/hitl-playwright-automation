@@ -1,0 +1,24 @@
+description: Validate pagination controls and bulk select/unselect behavior on the Task Grid
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1052417
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+allure:
+  feature: HITL Task Management
+  story: HITL - QA Automation: Pagination Controls on Task Grid + Select / Unselect All in View / Page
+  title: HITL - Pagination + Bulk Select/Unselect Controls
+  description: >
+    This test verifies pagination, shift+select, and select-all-on-page functionality to ensure user interactions
+    work as expected for large volumes of task records.
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - ui
+    - pagination
+    - selection

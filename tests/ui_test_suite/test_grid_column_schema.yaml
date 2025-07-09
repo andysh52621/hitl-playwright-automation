@@ -1,0 +1,55 @@
+# test case and ado meta-data
+description: Validate that grid column display in the UI matches the configured grid schema in the domain
+entity: Product
+domain: QAProduct
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1043808
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Grid Schema configuration and UI verification
+  title: Validate grid column display matches schema configuration
+  description: >
+    This test ensures that the Task Manager UI correctly reflects the grid schema configured in the Grid Schema Designer.
+    It validates column labels, order, field mappings, and visibility in the task grid after applying a new schema.
+    Additionally, it confirms that each visible column maps correctly to its data field and that the values shown match the expected schema.
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - schema
+    - grid
+
+# testcase specific testdata
+test_data:
+  test:
+    grid_schema: {
+      "columns": [
+        { "name": "ProductKey", "label": "Product Key" },
+        { "name": "ProductBaseKey", "label": "Product Base Key" },
+        { "name": "NumberofProductsonBase", "label": "Number Of Products On Base" },
+        { "name": "ProductTypeCode", "label": "Product Type Code" }
+      ]
+    }
+
+    restore_grid_schema: {
+      "columns": [
+        { "name": "ProductKey", "label": "Product Key" },
+        { "name": "ProductBaseKey", "label": "Product Base Key" },
+        { "name": "NumberofProductsonBase", "label": "Number Of Products On Base" },
+        { "name": "ProductTypeCode", "label": "Product Type Code" },
+        { "name": "Description", "label": "Description" },
+        { "name": "PrimaryCatalogNumber", "label": "PrimaryCatalogNumber" },
+        { "name": "ProductSpendCategory", "label": "ProductSpendCategory" },
+        { "name": "UNSPSCCommodity", "label": "UNSPSCCommodity" },
+        { "name": "UNSPSCCommodityCode", "label": "UNSPSCCommodityCode" },
+        { "name": "CatalogNumberStripped", "label": "CatalogNumberStripped" },
+        { "name": "SyncCode", "label": "SyncCode" },
+        { "name": "SyncCodeSubCategory", "label": "SyncCodeSubCategory" }
+      ]
+    }

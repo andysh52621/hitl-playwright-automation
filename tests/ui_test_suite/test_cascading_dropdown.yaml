@@ -1,0 +1,37 @@
+# test case and ado meta-data
+description: Validate that grid column display in the UI matches the configured grid schema in the domain
+entity: QACascading
+domain: QAProduct
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1043810
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Cascading Dropdown Configuration
+  title: Validate dynamic dropdown behavior and error message
+  description: >
+    This test ensures that when a user selects a "State", the corresponding "City" dropdown is populated.
+    It also validates that the "City" dropdown is required, and an appropriate message is shown if not selected.
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - cascading
+    - dropdown
+    - form-validation
+
+# testcase specific testdata
+test_data:
+  test:
+    dropdown_values:
+      state: Texas
+      expected_cities:
+        - Dallas
+        - Houston
+        - Austin
+      required_error_message: "City Dropdown is a required property"

@@ -1,0 +1,249 @@
+name: '${{ parameters.env }}-HITL-${{ parameters.suite_type }}-$(Build.SourceBranchName)-$(Date:yyyyMMdd)-$(Date:HHmmss)-$(Rev:.r)'
+
+parameters:
+  - name: env
+    displayName: Choose Environment
+    type: string
+    default: "test"
+    values:
+      - "dev"
+      - "test"
+      - "stage"
+      - "prod"
+
+  - name: suite_type
+    displayName: Choose suite type
+    type: string
+    default: "regression"
+    values:
+      - "smoke"
+      - "regression"
+      - "api"
+
+variables:
+  ${{ if eq(parameters.env, 'test') }}:
+    azureSubscription: azure-deploy-vizient-nonprod
+    keyVault: vzn-e2-hitltmtest-01
+  ${{ if eq(parameters.env, 'dev') }}:
+    azureSubscription: azure-deploy-vizient-sandbox
+    keyVault: vzn-e2-hitltmdev-01
+  ${{ if eq(parameters.env, 'stage') }}:
+    azureSubscription: azure-deploy-vizient-prod
+    keyVault: vzn-e2-hitltmstage-01
+  ${{ if eq(parameters.env, 'prod') }}:
+    azureSubscription: azure-deploy-vizient-prod
+    keyVault: vzn-e2-hitltmprod-01
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - '*'
+    exclude:
+      - '*.md'
+      - 'docs/*'
+      - '.gitignore'
+
+schedules:
+  - cron: "0 3 * * *"
+    displayName: "Daily HITL UI & API Tests - 10:00 PM CDT (03:00 UTC)"
+    branches:
+      include:
+        - master
+    always: true
+
+pool: linux
+
+stages:
+  - stage: Checkout
+    displayName: "Build and Test"
+    jobs:
+      - job: Cleanup_root_files_try1
+        displayName: "Cleanup root-owned files"
+        steps:
+          - checkout: none
+          - script: |
+              echo "📌 Adjusting ownership before cleanup..."
+              sudo chown -R $(whoami):$(whoami) $(System.DefaultWorkingDirectory)
+              git clean -ffdx
+            displayName: "🔧 Fix permissions and Cleanup Repository"
+            continueOnError: true
+
+      - job: Cleanup_root_files_try2
+        displayName: "Cleanup pytest cache files"
+        dependsOn: Cleanup_root_files_try1
+        steps:
+          - checkout: none
+          - bash: |
+              echo "Current working dir is" `pwd`
+              echo "root owned files and directories are "
+              find . -user root -ls
+              echo " ########### "
+              echo " "
+              find . -user root | xargs -I {} sudo rm -rf {}
+              echo "Removed root owned files and directories"
+            continueOnError: true
+
+      - job: Build_And_Run_Playwright_Tests
+        displayName: "Build Container and Run Playwright Tests"
+        dependsOn: Cleanup_root_files_try2
+        steps:
+          # - checkout: self
+          #   clean: false
+          # Fetch secret from sandbox subscription
+          - task: AzureKeyVault@2
+            name: SandboxSecrets
+            displayName: 'Fetch HITL DB Password from Sandbox KeyVault'
+            inputs:
+              azureSubscription: 'azure-deploy-vizient-sandbox'
+              KeyVaultName: 'vzn-e2-hitltmdev-01'
+              SecretsFilter: 'HITL-DB-User-Password'
+              RunAsPreJob: false
+          # Set output variable from non-prod secret
+          - script: |
+              echo "##vso[task.setvariable variable=Sandbox-HITL-DB-User-Password;issecret=true]$(HITL-DB-User-Password)"
+            displayName: 'Set Sandbox Secret Variable'
+            continueOnError: true
+
+          # Fetch secret from dynamic selection
+          - task: AzureKeyVault@2
+            name: NonProdSecrets
+            displayName: 'Fetch HITL DB Password from NonProd KeyVault'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              KeyVaultName: $(keyVault)
+              SecretsFilter: 'HITL-DB-User-Password,ServiceBusSharedAccessKey'
+              RunAsPreJob: false
+          # Set output variable from non-prod secret
+          - script: |
+              echo "##vso[task.setvariable variable=Dynamic-HITL-DB-User-Password;issecret=true]$(HITL-DB-User-Password)"
+              echo "##vso[task.setvariable variable=ServiceBusSharedAccessKey;issecret=true]$(ServiceBusSharedAccessKey)"
+            displayName: 'Set Dynamic Secret Variable'
+            continueOnError: true
+
+          - script: |
+              docker build -t playwright-tests .
+            displayName: "Build Docker Image"
+
+
+          - script: |
+              echo "🔍 Running Playwright tests inside Docker..."
+              
+              docker run --rm \
+                --name playwright-tests \
+                -u $(id -u):$(id -g) \
+                -e IS_PIPELINE=cicd \
+                -e SUITE_TYPE="${{ parameters.suite_type }}" \
+                -e RUN_ENV="${{ parameters.env }}" \
+                -e SANDBOX_DB_PASS="$(Sandbox-HITL-DB-User-Password)" \
+                -e DYNAMIC_DB_PASS="$(Dynamic-HITL-DB-User-Password)" \
+                -e HITL_ADO_PAT="$(HITL-ADO-PAT)" \
+                -e ServiceBusSharedAccessKey="$(ServiceBusSharedAccessKey)" \
+                -v $(System.DefaultWorkingDirectory):/app \
+                -w /app \
+                playwright-tests
+            displayName: "Run Playwright Tests"
+            env:
+              Sandbox-HITL-DB-User-Password: $(Sandbox-HITL-DB-User-Password)
+              Dynamic-HITL-DB-User-Password: $(Dynamic-HITL-DB-User-Password)
+              HITL-ADO-PAT: $(HITL-ADO-PAT)
+              ServiceBusSharedAccessKey: $(ServiceBusSharedAccessKey)
+            continueOnError: true
+
+
+          - script: |
+              echo "📍 Current working directory:"
+              pwd
+            displayName: "📌 Debug: Print Current Working Directory"
+            continueOnError: true
+
+          - script: |
+              echo "📂 Printing project directory structure..."
+              sudo apt-get update && sudo apt-get install -y tree
+              tree -L 3 || echo "tree command failed"
+            displayName: "📁 Debug: Print Project Folder Structure"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(System.DefaultWorkingDirectory)/screenshots'
+              artifactName: 'playwright-screenshots'
+              publishLocation: 'container'
+            displayName: "Upload Playwright Screenshots"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(System.DefaultWorkingDirectory)/pytest_basic_html_report.html'
+              artifactName: 'Basic pytest html report'
+              publishLocation: 'container'
+            displayName: "Upload Basic pytest html report"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(System.DefaultWorkingDirectory)/pytest_html_report.html'
+              artifactName: 'Advanced pytest html report'
+              publishLocation: 'container'
+            displayName: "Advanced pytest html report"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(System.DefaultWorkingDirectory)/allure-report'
+              artifactName: 'allure-report'
+              publishLocation: 'container'
+            displayName: "Publish Allure Report as Artifact"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(System.DefaultWorkingDirectory)/allure-results'
+              artifactName: 'allure-results'
+              publishLocation: 'container'
+            displayName: "Publish Allure Results as Artifact"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(System.DefaultWorkingDirectory)/videos'
+              artifactName: 'automation-videos'
+              publishLocation: 'container'
+            displayName: "Publish automation-videos as Artifact"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(System.DefaultWorkingDirectory)/hitl_test.log'
+              artifactName: 'hitl_test.log'
+              publishLocation: 'container'
+            displayName: "Publish hitl_test.log as Artifact"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(System.DefaultWorkingDirectory)/allure-results/test_coverage_report.html'
+              artifactName: 'test_coverage_report'
+              publishLocation: 'container'
+            displayName: "Publish HILT test_coverage_report as Artifact"
+            continueOnError: true
+
+          - script: |
+              echo "🧹 Stopping and removing only the 'playwright-tests' container..."
+              docker rm -f playwright-tests || echo "Container not found or already removed."
+              
+              echo "🧼 Optionally remove the local image..."
+              docker rmi -f playwright-tests || echo "Image not found or already removed."
+              
+              echo "✅ Docker cleanup complete."
+            displayName: "🧹 Cleanup Docker Container and Image"
+            condition: always()
+
+          - script: |
+              echo "🔥 Force cleaning .pytest_cache from host in case container left it behind..."
+              sudo rm -rf $(System.DefaultWorkingDirectory)/.pytest_cache || echo "No .pytest_cache found"
+            displayName: "🔥 Cleanup pytest cache on host (fallback)"
+            condition: always()

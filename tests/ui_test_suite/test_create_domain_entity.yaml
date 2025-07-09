@@ -1,0 +1,22 @@
+#test case and ado meta-data
+description: Verify Create and removal of AutoDomain card and AutoEntity
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1034286
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Domain cards and Entity validations
+  title: Verify Create and removal of AutoDomain card and AutoEntity
+  description: Test to validate successful creation and removal of Domain and entity
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - smoke
+    - regression

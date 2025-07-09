@@ -1,0 +1,21 @@
+#test case and ado meta-data
+description: Verify Save for later after editing product task description
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1038583
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Save task For Later
+  title: Save for later with description edit
+  description: Test to edit product task and click Save for Later
+  severity: normal
+  owner: deepali.shah
+  tags:
+    - regression

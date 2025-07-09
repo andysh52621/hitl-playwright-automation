@@ -1,0 +1,22 @@
+#test case and ado meta-data
+description: Verify resolving product tasks in the HITL flow
+domain: QAProduct
+entity: QAEntitySubmitter
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1043813
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Resolve HITL task via dashboard
+  title: Resolve task flow from login to completion
+  description: Test to resolve product task
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - smoke
+    - regression

@@ -1,0 +1,45 @@
+description: Post product task message to Azure Service Bus queue to validate SB integration with positive message delivery and task creation and negative scenarios delivery failures and invalid payloads and its Performance
+  and throughput validations for batch processing
+domain: QAProduct
+entity: Product
+cortex_domain_tag: humanintheloopplatformhitl-domain
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1054470
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+allure:
+  feature: HITL Task Management
+  story: Azure Service Bus - Task Creation and Processing
+  title: Validate SB Message Delivery, Task Creation, and Failure Handling
+  description: >
+    This test validates Azure Service Bus integration by sending a task batch to the Service Bus queue,
+    confirming successful delivery, and verifying task creation in the backend DB.
+    It also covers delivery failure simulations, invalid payload rejection, and ensures bulk processing
+    meets performance thresholds.
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - api
+    - azure
+    - servicebus
+    - Service Bus Message Sent (Positive Case):
+        - Trigger batch task creation via API
+        - Verify correct payload structure (task IDs, fields)
+        - Ensure successful SB delivery (no dead-letter)
+    - Service Bus Message Processing:
+        - Verify tasks created in DB from SB message
+        - Confirm data integrity (name, status match)
+        - Ensure no corruption or missing entries
+    - Negative Scenarios:
+        - Simulate message delivery failure (e.g., timeout)
+        - Verify graceful handling, error logging, and alerting
+        - Send invalid SB payload (e.g., missing fields)
+        - Ensure message is rejected and error is logged
+    - Service Bus Performance:
+        - Verify batch of 100+ tasks processes without failure
+        - Ensure 2–3s per task processing time post-delivery
+        - Confirm handling of concurrent messages at scale

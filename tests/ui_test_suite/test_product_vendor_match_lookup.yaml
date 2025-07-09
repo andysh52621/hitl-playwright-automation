@@ -1,0 +1,143 @@
+# test case and ado meta-data
+description: Validate Search and Suggested Vendor Lookup using "Match To Existing" in Task screen
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1041621
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Match To Existing - Search and Suggested Vendor Lookup
+  title: Search and Suggested Vendor Lookup using "Match To Existing"
+  description: >
+    As a Task Manager user, validate the ability to search and suggest vendor records 
+    using the "Match To Existing" control in the Task screen.
+
+    The test ensures:
+      - Search modal opens correctly.
+      - Search button remains disabled until mandatory fields (e.g., Vendor Name) are filled.
+      - Matching vendors are displayed on valid search.
+      - Suggested vendor modal shows results automatically or indicates no suggestions.
+      - Submit button behaves correctly depending on selection state.
+      - Modal maintains state across open/close cycles.
+      - All relevant UI states and validations are enforced.
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - ui
+    - vendor-lookup
+    - match-to-existing
+
+# testcase specific testdata
+# scenario 1 : Schema not associated — validates that the error message is shown.
+# scenario 2 : with search schema attached
+#              a) Modal behavior — confirms initial disabled state and vendor name entry.
+#              b) Result handling — ensures search yields rows and enables Submit.
+
+test_data:
+  test:
+    "vendor_name": "amerisourcebergen"
+    search_schema:
+      empty_product_search_schema:
+        [ ]
+      product_vendor_search_schema:
+        [
+          {
+            "ActionName": "ProductSearch",
+            "SearchParameters": {
+              "dataSchema": {
+                "type": "object",
+                "properties": {
+                  "vendorName": {
+                    "type": "object"
+                  },
+                  "catalogNumber": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "vendorName"
+                ]
+              },
+              "formSchema": {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      {
+                        "options": {
+                          "autoComplete": true,
+                          "placeholder": "Search for Vendor",
+                          "dataSourceUrl": "https://web-api-hitl-task-manager-eastus2-test-01.vzn-eastus2-intase-nonprod-ase-03.appserviceenvironment.net/api/Task/GetDropdownValues",
+                          "minInputLength": 3
+                        },
+                        "scope": "#/properties/vendorName",
+                        "type": "Control"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/catalogNumber"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/description"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "ApiRequestMapping": {
+              "vendorName.value": "vendorname",
+              "catalogNumber": "catalognumber",
+              "description": "description"
+            },
+            "ResponseDataField": "vendor.matches",
+            "IsSecured": true,
+            "BatchSize": 1,
+            "SearchEndpointDesc": "Sends the payload to VizMatch product search endpoint and gets the matching result",
+            "SearchApiEndpointUrl": "https://api.test.vizientinc.com/v1/vizmatch/product/search",
+            "OAuth2TokenUrl": "https://sit-login.alliancewebs.net/oauth2/ausxasv3qrzPDl0j90h7/v1/token",
+            "ClientId": "0oa2bv9hiqvOF2ENF0h8",
+            "ClientSecret": "XXXXX",
+            "SubscriptionKey": "9b693969b27c4e829a61f4da6e2b1888",
+            "UseAPIM": true,
+            "UseGlobalSecret": false,
+            "ColumnsToDisplayInGrid": [
+              {
+                "columnName": "Vendor Name",
+                "field": "vVendorName"
+              },
+              {
+                "columnName": "Vendor ID",
+                "field": "vVendorId"
+              },
+              {
+                "columnName": "Vendor Parent ID",
+                "field": "vVendorParentId"
+              },
+              {
+                "columnName": "Vendor Top Parent ID",
+                "field": "vVendorTopParentId"
+              },
+              {
+                "columnName": "Alias Name",
+                "field": "vaAliasName"
+              },
+              {
+                "columnName": "Alias ID",
+                "field": "vaAliasId"
+              }
+            ]
+          }
+        ]

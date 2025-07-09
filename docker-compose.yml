@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  playwright:
+    build: .
+    container_name: playwright-tests
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      RUN_ENV: ${RUN_EVN}
+      IS_PIPELINE: ${IS_PIPELINE}
+      WORK_DIR: /app
+    working_dir: /app
+    command: >
+      bash -c "pytest -m regression --alluredir=allure-results && \
+               allure generate allure-results -o allure-report --clean"
+    ports:
+      - "9222:9222" # optional for Playwright debugging
+    restart: "no"
+
+  allure-viewer:
+    image: frankescobar/allure-docker-service
+    container_name: allure-server
+    ports:
+      - "5050:5050"
+    environment:
+      CHECK_RESULTS_EVERY_SECONDS: 5
+      KEEP_HISTORY: "true"
+    depends_on:
+      - playwright
+    restart: always

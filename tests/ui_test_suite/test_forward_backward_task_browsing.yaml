@@ -1,0 +1,32 @@
+# test case and ado meta-data
+description: Validate Prev and Next task navigation in the detail screen
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1038582
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Navigate between task records
+  title: Prev/Next navigation validation
+  description: >
+    As a Task Manager user, I want to use the Prev and Next buttons to navigate between task records
+    so I can easily review multiple task entries without going back to the main list or refreshing the page.
+
+    This test validates:
+      - Visibility of Prev and Next buttons at the top right.
+      - Correct behavior of Next and Prev navigation.
+      - Proper enabling/disabling of Prev/Next at boundaries.
+      - Product details update dynamically without a page refresh.
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - ui
+    - navigation
+    - task-detail

@@ -1,0 +1,22 @@
+description: Test create domain and entity via API
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1052910
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+allure:
+  feature: HITL Task Management
+  story: 'HITL - QA Automation : Add/Edit Entity API Testing'
+  title: 'HITL - QA Automation : Add/Edit Entity API Testing'
+  description: |-
+    - Test the Add Entity API: Send a POST request to the Add Entity endpoint with valid data.
+    - Verify that the response status is 200 OK.
+    - Ensure that the response body contains the expected entity fields (e.g., ID, name, etc.).
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - ui

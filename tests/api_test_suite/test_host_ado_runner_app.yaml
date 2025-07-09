@@ -1,0 +1,23 @@
+description: The ADO test runner logic is decoupled from the main test framework and refactored into an independent, callable service.
+  The extracted test runner is deployed as a RESTful web app in Azure App Service. The service is accessible via HTTPS with secure authentication (e.g., token or key-based).
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1055717
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+allure:
+  feature: HITL Task Management
+  story: HITL - Host ADO Test Runner as a Standalone Azure Web App
+  title: HITL - Host ADO Test Runner as a Standalone Azure Web App
+  description: |-
+    - The ADO test runner logic is decoupled from the main test framework and refactored into an independent, callable service.
+    - The extracted test runner is deployed as a RESTful web app in Azure App Service.
+    - The service is accessible via HTTPS with secure authentication (e.g., token or key-based).
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - ui

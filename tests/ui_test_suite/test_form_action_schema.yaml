@@ -1,0 +1,605 @@
+# test case and ado meta-data
+description: Validate adding and updating Action Schema in Domain config and verifying trigger from Task page
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1038579
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Action Schema configuration and Task trigger validation
+  title: Add and update Action Schema and validate API trigger from Task page
+  description: >
+    Validates that an admin user can add and modify an Action Schema via the UI. 
+    On saving, the schema becomes active and actions are available and triggerable from the Task page. 
+    Confirms proper payload sent and appropriate success/failure handling.
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - integration
+    - schema
+
+# testcase specific testdata
+# scenario 1 : valid form schema with valid action schema test Endpoint
+# scenario 2 : valid form schema with invalid action schema test Endpoint
+# scenario 3 : valid form schema with non-existing action-name
+test_data:
+  test:
+    action_schema:
+      action_schema_with_valid_testEndpoint: [
+        {
+          "ActionName": "valid_testEndpoint",
+          "ActionDesc": "Save the Product and Send to Test Endpoint",
+          "ApiEndpointUrl": "https://web-api-hitl-task-manager-eastus2-test-01.vzn-eastus2-intase-nonprod-ase-03.appserviceenvironment.net/api/Task/TestEndpoint",
+          "OAuth2TokenUrl": "https://sit-login.alliancewebs.net/oauth2/ausxasv3qrzPDl0j90h7/v1/token",
+          "SubscriptionKey": "adfbf7a4e5804692882f28519f04acb2",
+          "UseAPIM": true,
+          "MappingFromTaskToApiRequest": {
+            "VendorName.text": "vName",
+            "PrimaryCatalogNumber": "vCatalogNumber",
+            "Description": "vDesc"
+          },
+          "AdditionalParameters": {
+            "work_flow_name": "workflow2",
+            "changetype": "update"
+          },
+          "UseGlobalSecret": false,
+          "BatchSize": 1,
+          "IsSecured": false
+        }
+      ]
+      action_schema_with_invalid_testEndpoint: [
+        {
+          "ActionName": "invalid_testEndpoint",
+          "ActionDesc": "Save the Product and Send to Test Endpoint",
+          "ApiEndpointUrl": "https://web-api-hitl-task-manager-eastus2-test-01.vzn-eastus2-intase-nonprod-ase-03.appserviceenvironment.net/api/Task/TestEndpoint1234",
+          "OAuth2TokenUrl": "https://sit-login.alliancewebs.net/oauth2/ausxasv3qrzPDl0j90h7/v1/token",
+          "SubscriptionKey": "adfbf7a4e5804692882f28519f04acb2",
+          "UseAPIM": true,
+          "MappingFromTaskToApiRequest": {
+            "VendorName.text": "vName",
+            "PrimaryCatalogNumber": "vCatalogNumber",
+            "Description": "vDesc"
+          },
+          "AdditionalParameters": {
+            "work_flow_name": "workflow2",
+            "changetype": "update"
+          },
+          "UseGlobalSecret": false,
+          "BatchSize": 1,
+          "IsSecured": false
+        }
+      ]
+    form_schema:
+      form_schema_with_valid_testEndpoint: {
+        "elements": [
+          {
+            "text": "Product",
+            "type": "Label"
+          },
+          {
+            "options": {
+              "readOnly": true
+            },
+            "scope": "#/properties/ProductKey",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "readOnly": false
+            },
+            "scope": "#/properties/ProductSpendCategory",
+            "type": "Control"
+          },
+          {
+            "required": true,
+            "scope": "#/properties/ProductBaseKey",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/NumberofProductsonBase",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "autoComplete": true,
+              "placeholder": "Search for Vendor",
+              "dataSourceUrl": "https://web-api-hitl-task-manager-eastus2-test-01.vzn-eastus2-intase-nonprod-ase-03.appserviceenvironment.net/api/Task/GetDropdownValues",
+              "minInputLength": 3
+            },
+            "scope": "#/properties/VendorName",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "multi": true
+            },
+            "scope": "#/properties/PrimaryCatalogNumber",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "multi": true
+            },
+            "scope": "#/properties/Description",
+            "type": "Control"
+          },
+          {
+            "label": "UNSPSC Commodity Code",
+            "scope": "#/properties/UNSPSCCommodityCode",
+            "type": "Control"
+          },
+          {
+            "label": "UNSPSC Commodity",
+            "options": {
+              "multi": true
+            },
+            "scope": "#/properties/UNSPSCCommodity",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/ProductTypeCode",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/CatalogNumberStripped",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/DescriptionException",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/SyncCode",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/SyncCodeSubCategory",
+            "type": "Control"
+          },
+          {
+            "elements": [
+              {
+                "scope": "#/properties/matchToExisting",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Search",
+                  "openDialog": true,
+                  "dialogComponent": "SearchComponent",
+                  "dialogData": {
+                    "title": "Vendor Lookup",
+                    "actionName": "ProductSearch"
+                  },
+                  "formMapping": {
+                    "vVendorName": "matchToExisting"
+                  }
+                },
+                "scope": "#",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Suggested",
+                  "openDialog": true,
+                  "dialogComponent": "SearchComponent",
+                  "dialogData": {
+                    "title": "Vendor Lookup",
+                    "actionName": "ProductSearch"
+                  },
+                  "formMapping": {
+                    "vVendorName": "matchToExisting"
+                  },
+                  "preload": true
+                },
+                "scope": "#",
+                "type": "Control"
+              }
+            ],
+            "type": "HorizontalLayout"
+          },
+          {
+            "elements": [
+              {
+                "options": {
+                  "buttonText": "Save",
+                  "enableValidation": true,
+                  "customAction": true,
+                  "successMessage": "Action completed successfully for Product Entity",
+                  "failureMessage": "Action not completed successfully for Product Entity!",
+                  "actionName": "valid_testEndpoint"
+                },
+                "scope": "#",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Save For Later",
+                  "enableValidation": false,
+                  "saveForLater": true,
+                  "successMessage": "Action completed successfully for Product Entity",
+                  "failureMessage": "Action not completed successfully for Product Entity!"
+                },
+                "scope": "#",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Cancel",
+                  "cancel": true
+                },
+                "scope": "#",
+                "type": "Control"
+              }
+            ],
+            "type": "HorizontalLayout"
+          }
+        ],
+        "type": "VerticalLayout"
+      }
+      form_schema_with_invalid_testEndpoint: {
+        "elements": [
+          {
+            "text": "Product",
+            "type": "Label"
+          },
+          {
+            "options": {
+              "readOnly": true
+            },
+            "scope": "#/properties/ProductKey",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "readOnly": false
+            },
+            "scope": "#/properties/ProductSpendCategory",
+            "type": "Control"
+          },
+          {
+            "required": true,
+            "scope": "#/properties/ProductBaseKey",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/NumberofProductsonBase",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "autoComplete": true,
+              "placeholder": "Search for Vendor",
+              "dataSourceUrl": "https://web-api-hitl-task-manager-eastus2-test-01.vzn-eastus2-intase-nonprod-ase-03.appserviceenvironment.net/api/Task/GetDropdownValues",
+              "minInputLength": 3
+            },
+            "scope": "#/properties/VendorName",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "multi": true
+            },
+            "scope": "#/properties/PrimaryCatalogNumber",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "multi": true
+            },
+            "scope": "#/properties/Description",
+            "type": "Control"
+          },
+          {
+            "label": "UNSPSC Commodity Code",
+            "scope": "#/properties/UNSPSCCommodityCode",
+            "type": "Control"
+          },
+          {
+            "label": "UNSPSC Commodity",
+            "options": {
+              "multi": true
+            },
+            "scope": "#/properties/UNSPSCCommodity",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/ProductTypeCode",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/CatalogNumberStripped",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/DescriptionException",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/SyncCode",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/SyncCodeSubCategory",
+            "type": "Control"
+          },
+          {
+            "elements": [
+              {
+                "scope": "#/properties/matchToExisting",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Search",
+                  "openDialog": true,
+                  "dialogComponent": "SearchComponent",
+                  "dialogData": {
+                    "title": "Vendor Lookup",
+                    "actionName": "ProductSearch"
+                  },
+                  "formMapping": {
+                    "vVendorName": "matchToExisting"
+                  }
+                },
+                "scope": "#",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Suggested",
+                  "openDialog": true,
+                  "dialogComponent": "SearchComponent",
+                  "dialogData": {
+                    "title": "Vendor Lookup",
+                    "actionName": "ProductSearch"
+                  },
+                  "formMapping": {
+                    "vVendorName": "matchToExisting"
+                  },
+                  "preload": true
+                },
+                "scope": "#",
+                "type": "Control"
+              }
+            ],
+            "type": "HorizontalLayout"
+          },
+          {
+            "elements": [
+              {
+                "options": {
+                  "buttonText": "Save",
+                  "enableValidation": true,
+                  "customAction": true,
+                  "successMessage": "Action completed successfully for Product Entity",
+                  "failureMessage": "Action not completed successfully for Product Entity!",
+                  "actionName": "invalid_testEndpoint"
+                },
+                "scope": "#",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Save For Later",
+                  "enableValidation": false,
+                  "saveForLater": true,
+                  "successMessage": "Action completed successfully for Product Entity",
+                  "failureMessage": "Action not completed successfully for Product Entity!"
+                },
+                "scope": "#",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Cancel",
+                  "cancel": true
+                },
+                "scope": "#",
+                "type": "Control"
+              }
+            ],
+            "type": "HorizontalLayout"
+          }
+        ],
+        "type": "VerticalLayout"
+      }
+      form_schema_with_non_existing_endpoint: {
+        "elements": [
+          {
+            "text": "Product",
+            "type": "Label"
+          },
+          {
+            "options": {
+              "readOnly": true
+            },
+            "scope": "#/properties/ProductKey",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "readOnly": false
+            },
+            "scope": "#/properties/ProductSpendCategory",
+            "type": "Control"
+          },
+          {
+            "required": true,
+            "scope": "#/properties/ProductBaseKey",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/NumberofProductsonBase",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "autoComplete": true,
+              "placeholder": "Search for Vendor",
+              "dataSourceUrl": "https://web-api-hitl-task-manager-eastus2-test-01.vzn-eastus2-intase-nonprod-ase-03.appserviceenvironment.net/api/Task/GetDropdownValues",
+              "minInputLength": 3
+            },
+            "scope": "#/properties/VendorName",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "multi": true
+            },
+            "scope": "#/properties/PrimaryCatalogNumber",
+            "type": "Control"
+          },
+          {
+            "options": {
+              "multi": true
+            },
+            "scope": "#/properties/Description",
+            "type": "Control"
+          },
+          {
+            "label": "UNSPSC Commodity Code",
+            "scope": "#/properties/UNSPSCCommodityCode",
+            "type": "Control"
+          },
+          {
+            "label": "UNSPSC Commodity",
+            "options": {
+              "multi": true
+            },
+            "scope": "#/properties/UNSPSCCommodity",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/ProductTypeCode",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/CatalogNumberStripped",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/DescriptionException",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/SyncCode",
+            "type": "Control"
+          },
+          {
+            "scope": "#/properties/SyncCodeSubCategory",
+            "type": "Control"
+          },
+          {
+            "elements": [
+              {
+                "scope": "#/properties/matchToExisting",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Search",
+                  "openDialog": true,
+                  "dialogComponent": "SearchComponent",
+                  "dialogData": {
+                    "title": "Vendor Lookup",
+                    "actionName": "ProductSearch"
+                  },
+                  "formMapping": {
+                    "vVendorName": "matchToExisting"
+                  }
+                },
+                "scope": "#",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Suggested",
+                  "openDialog": true,
+                  "dialogComponent": "SearchComponent",
+                  "dialogData": {
+                    "title": "Vendor Lookup",
+                    "actionName": "ProductSearch"
+                  },
+                  "formMapping": {
+                    "vVendorName": "matchToExisting"
+                  },
+                  "preload": true
+                },
+                "scope": "#",
+                "type": "Control"
+              }
+            ],
+            "type": "HorizontalLayout"
+          },
+          {
+            "elements": [
+              {
+                "options": {
+                  "buttonText": "Save",
+                  "enableValidation": true,
+                  "customAction": true,
+                  "successMessage": "Action completed successfully for Product Entity",
+                  "failureMessage": "Action not completed successfully for Product Entity!",
+                  "actionName": "non_existing_endpoint"
+                },
+                "scope": "#",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Save For Later",
+                  "enableValidation": false,
+                  "saveForLater": true,
+                  "successMessage": "Action completed successfully for Product Entity",
+                  "failureMessage": "Action not completed successfully for Product Entity!"
+                },
+                "scope": "#",
+                "type": "Control"
+              },
+              {
+                "options": {
+                  "buttonText": "Cancel",
+                  "cancel": true
+                },
+                "scope": "#",
+                "type": "Control"
+              }
+            ],
+            "type": "HorizontalLayout"
+          }
+        ],
+        "type": "VerticalLayout"
+      }
+  prod:
+    action_schema:
+      send2TestEndpoint: [
+        {
+          "ActionName": "send2TestEndpoint",
+          "ActionDesc": "Save the Product and Send to Test Endpoint",
+          "ApiEndpointUrl": "https://web-api-hitl-task-manager-eastus2-test-01.vzn-eastus2-intase-nonprod-ase-03.appserviceenvironment.net/api/Task/TestEndpoint",
+          "OAuth2TokenUrl": "https://sit-login.alliancewebs.net/oauth2/ausxasv3qrzPDl0j90h7/v1/token",
+          "SubscriptionKey": "adfbf7a4e5804692882f28519f04acb2",
+          "UseAPIM": true,
+          "MappingFromTaskToApiRequest": {
+            "VendorName.text": "vName",
+            "PrimaryCatalogNumber": "vCatalogNumber",
+            "Description": "vDesc"
+          },
+          "AdditionalParameters": {
+            "work_flow_name": "workflow2",
+            "changetype": "update"
+          },
+          "UseGlobalSecret": false,
+          "BatchSize": 1,
+          "IsSecured": false
+        }
+      ]
+

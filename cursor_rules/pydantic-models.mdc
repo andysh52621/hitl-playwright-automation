@@ -1,0 +1,15 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Guidelines for defining Pydantic models within the models directory of a FastAPI project to ensure data validation and serialization.Specific rules for creating Pydantic models, focusing on versioning and usage within the project.
+globs: app/models/*.py
+---
+- Use Pydantic models for request and response schemas
+- Define data types using Pydantic fields
+- Implement validation logic using Pydantic validators
+- Use type hints for all function signatures. Prefer Pydantic models over raw dictionaries for input validation.
+- Use Pydantic v2.
+- Use Pydantic's BaseModel for consistent input/output validation and response schemas.

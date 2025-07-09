@@ -1,0 +1,109 @@
+description: Validate Task Search using task filters in Task Manager
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1042818
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+allure:
+  feature: HITL Task Management
+  story: Task Manager Filtering and Search
+  title: Task search using filters (Product Base Key, Vendor, State, Date Range)
+  description: >
+    As a Task Manager user, I want to use filters on the Task Manager screen to search for tasks 
+    based on Product Base Key, Vendor, State, and Date Range. 
+    This test validates:
+      - Filter panel accessibility.
+      - Required field validation for Product Base Key.
+      - Button enablement logic.
+      - Filtering accuracy and data grid results.
+      - Clear Parameters functionality.
+      - No-results handling.
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - ui
+
+# expected_behaviors:
+# - search_button_disabled_until_required_fields_filled
+# - clear_parameters_resets_fields
+# - results_match_criteria
+# - no_results_message_displayed
+
+test_data:
+  test:
+    "vendor_name": "amerisourcebergen"
+    task_search_schema:
+      empty_task_search_schema:
+        [ ]
+      task_search_schema:
+        [
+          {
+            "ActionName": "TaskSearch",
+            "SearchParameters": {
+              "dataSchema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string"
+                  },
+                  "ProductKey": {
+                    "type": "array"
+                  },
+                  "vendorName": {
+                    "type": "array"
+                  },
+                  "ProductBaseKey": {
+                    "type": "array"
+                  }
+                },
+                "required": [ ]
+              },
+              "formSchema": {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/description",
+                    "options": {
+                      "multi": true,
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/ProductKey",
+                    "options": {
+                      "mdmInput": true
+                    }
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/ProductBaseKey",
+                    "options": {
+                      "mdmInput": true,
+                      "type": "integer"
+                    }
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/vendorName",
+                    "options": {
+                      "mdmInput": true,
+                      "selectLimit": 10,
+                      "autocomplete": true,
+                      "dataSourceUrl": "https://web-api-hitl-task-manager-eastus2-test-01.vzn-eastus2-intase-nonprod-ase-03.appserviceenvironment.net/api/Task/GetDropdownValues",
+                      "searchFilterPlaceholder": "Search...",
+                      "minimumSearchFilterLength": 3,
+                      "type": "integer"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]

@@ -1,0 +1,38 @@
+# test case and ado meta-data
+description: Validate Bulk Edit and Take Action on selected tasks
+domain: QAProduct
+entity: QABulkEditTakeAction
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1060133
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Bulk Edit and Take Action functionality
+  title: Bulk Edit & Take Action validation
+  description: >
+    As a QA engineer, I want to automate tests for Bulk Edit and Take Action
+    to ensure these high-impact workflows remain stable across releases.
+
+    This test validates:
+      - Selecting multiple tasks from the grid.
+      - Opening the Bulk Edit screen and validating editable fields.
+      - Applying changes to selected tasks and verifying persistence.
+      - Executing Take Action events on selected tasks.
+      - Verifying backend updates reflect the intended actions (move, update, acknowledge).
+      - Handling edge cases (no selection, incompatible schemas, failures mid-flow).
+      - Logging results with CI output and pass/fail indicators.
+      - Compatibility across supported environments and inclusion in regression suite.
+  severity: critical
+  owner: deepali.shah
+  tags:
+    - regression
+    - ui
+    - bulk-edit
+    - take-action
+    - task-grid
+

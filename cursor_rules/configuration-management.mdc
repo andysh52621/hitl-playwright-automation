@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Handles configuration management using environment variables within the 'conf' directory for flexible and maintainable application settings.
+globs: /conf/**/*.*
+---
+- Manage configuration using environment variables.

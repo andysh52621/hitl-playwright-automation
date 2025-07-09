@@ -1,0 +1,21 @@
+#test case and ado meta-data
+description: Prevent Overriding Saved Tasks by Multiple Users
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1043815
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Overriding Saved Tasks by Multiple Users
+  title: Overriding Saved Tasks by Multiple Users
+  description: Test to Prevent Overriding Saved Tasks by Multiple Users
+  severity: normal
+  owner: deepali.shah
+  tags:
+    - regression

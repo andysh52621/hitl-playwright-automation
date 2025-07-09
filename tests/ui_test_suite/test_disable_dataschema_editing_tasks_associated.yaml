@@ -1,0 +1,87 @@
+# test case and ado meta-data
+description: Verify that Data Schema editing is disabled when tasks are associated with the entity in HITL
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1057148
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Restrict Data Schema editing when tasks are present
+  title: Disable schema editing when tasks exist for an entity
+  description: Test to validate schema editor is read-only and warning is displayed when tasks are associated with the entity
+  severity: critical
+  owner: deepali.shah
+  tags:
+    - regression
+
+# testcase specific testdata
+test_data:
+  test:
+    data_schema: {
+    "properties": {
+        "Description": {
+            "type": "string",
+            "maxLength": 2000
+        },
+        "NumberofProductsonBase": {
+            "type": "string"
+        },
+        "PrimaryCatalogNumber": {
+            "type": "string",
+            "maxLength": 15
+        },
+        "ProductBaseKey": {
+            "type": "string"
+        },
+        "ProductKey": {
+            "type": "integer"
+        },
+        "ProductSpendCategory": {
+            "type": "string"
+        },
+        "UNSPSCCommodity": {
+            "type": "string",
+            "maxLength": 250
+        },
+        "UNSPSCCommodityCode": {
+            "type": "string"
+        },
+        "VendorName": {
+            "type": "object"
+        },
+        "matchToExisting": {
+            "type": "string"
+        },
+        "ProductTypeCode": {
+            "type": "string",
+            "maxLength": 5
+        },
+        "CatalogNumberStripped": {
+            "type": "string",
+            "maxLength": 15
+        },
+        "DescriptionException": {
+            "type": "string",
+            "enum": [
+                "True",
+                "False"
+            ]
+        },
+        "SyncCode": {
+            "type": "string"
+        },
+        "SyncCodeSubCategory": {
+            "type": "string"
+        }
+    },
+    "required": [],
+    "type": "object"
+}
+
+

@@ -1,0 +1,36 @@
+# test case and ado meta-data
+description: Validate that the multicolumn autocomplete dropdown for the Person field dynamically renders results based on filtered input from the user and persists the selected value.
+entity: QAMultiColumnAutocomplete
+domain: QAProduct
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1060863
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Multicolumn Autocomplete Configuration
+  title: Validate dynamic multicolumn autocomplete dropdown for Person field
+  description: >
+    This test validates that the multicolumn autocomplete dropdown for the "Person" field dynamically
+    fetches data from a remote API and displays results in multiple aligned columns.
+    It ensures filtering works across all columns (e.g., First Name, Last Name, City),
+    validates selection behavior via mouse and keyboard, and checks for persistence
+    of the selected object in the form.
+    
+
+  severity: critical
+  owner: deepali.shah
+  tags:
+    - regression
+    - multicolumn
+    - autocomplete
+
+  test_data:
+    city_search_1: Boston
+    person_search_2: Janet
+
+

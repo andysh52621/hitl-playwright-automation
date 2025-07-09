@@ -1,0 +1,24 @@
+# test case and ado meta-data
+description: Create batch of product tasks for product entity using endpoint task-batch-create
+domain: QAProduct
+entity: Product
+build_definition_id: 3499
+ado_plan_id: 979524
+ado_suite_id: 1040029
+ado_case_id: 1050766
+ado_org_url: https://dev.azure.com/Vizientinc
+ado_project: VizTech
+
+# allure reporting meta-data
+allure:
+  feature: HITL Task Management
+  story: Create HITL batch task via end-point
+  title: Create batch product payload for product domain and entity
+  description: Call endpoint to create a batch of product tasks and validate response, DB insert, and mapping
+  severity: critical
+  owner: andy.sharma
+  tags:
+    - regression
+    - api
+    - batch
+    - automation
